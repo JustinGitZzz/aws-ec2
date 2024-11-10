@@ -87,41 +87,60 @@ SSH into the instance with ssh -i ~/user_key.pem ec2-user@<public-ip>
 
 Congrats! The EC2 instance is now live and connected to the internet with SSH and SFTP access available.
 
-###Now let's add a user to the instance!
+### Now let's add a user to the instance!
 
 SSH into the instance and create a user
-'sudo adduser [user]'
+'''
+sudo adduser [user] 
+'''
 
 Create the .ssh directory for the user
-'sudo mkdir /home/[user]/.ssh
+'''
+sudo mkdir /home/[user]/.ssh
 sudo chown [user]:[user] /home/[user]/.ssh
-sudo chmod 700 /home/sftpjj/.ssh'
+sudo chmod 700 /home/sftpjj/.ssh 
+'''
 
 Upload your public key to the EC2 instance
-'scp -i "~/user_key.pem" "~/key.pub" ec2-user@<public-ip>:/home/[user]/.ssh/'
+'''
+scp -i "~/user_key.pem" "~/key.pub" ec2-user@<public-ip>:/home/[user]/.ssh/
+'''
 
 SSH to the ec2 instance
-'ssh -i ~/user_key.pem ec2-user@<public-ip>'
+'''
+ssh -i ~/user_key.pem ec2-user@<public-ip>
+'''
 
 Switch to the user
-'sudo su - [user]'
+'''
+sudo su - [user]
+'''
 
 Move the uploaded key to ./authorized_keys
-'cat /home/[user]/.ssh/file.pub >> /home/user/.ssh/authorized_keys'
+'''
+cat /home/[user]/.ssh/file.pub >> /home/user/.ssh/authorized_keys
+'''
 
 Remove the public key
-'rm /home/[user]/.ssh/file.pub'
+'''
+rm /home/[user]/.ssh/file.pub
+'''
 
 Set Permissions on ./authorized_keys
-'chmod 600 /home/[user]/.ssh/authorized_keys'
+'''
+chmod 600 /home/[user]/.ssh/authorized_keys
+'''
 
 Exit and connect to the instance with SFTP
-'sftp -i "~/user_key.pem" [user]@<public-ip>'
+'''sftp -i "~/user_key.pem" [user]@<public-ip>
+'''
 
-###Now lets configure the SSH server for the user
+###Now let's configure the SSH server for the user
 
 Start by using SSH to connect to the instance
-'ssh -i ~/user_key.pem ec2-user@<public-ip>'
+'''
+ssh -i ~/user_key.pem ec2-user@<public-ip>
+'''
 
 Open the SSH configuration file with nano or vim to edit
 'sudo nano /etc/ssh/ssd_config'
