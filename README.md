@@ -9,6 +9,7 @@ The AWS EC2 Secure SSH and SFTP Server Configuration project aims to use Amazon 
 - Networking and Security : Implementing SSH key-based authentication, firewall rules, and secure file transfer protocols
 - User and Access Management : Configuring user permissions and access within the server
 - Directory Confinement : Setting up chroot environment or directory access restrictions
+- Routing and Traffic Management : Using AWS VPC to create route tables to control the traffic flow between subnets and configuring internet gateways and VPC endpoints for efficient and secure access
 
 ### Tools Used
 
