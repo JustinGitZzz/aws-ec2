@@ -83,13 +83,72 @@ Select the VPC, Subnet, and Security Group made earlier
 
 Launch the instance and note the public IP address (this will be used to SSH)
 
-SSH into the instance with ssh -i path_to_your_key.pem ec2-user@<public-ip>
+SSH into the instance with ssh -i ~/user_key.pem ec2-user@<public-ip>
 
 Congrats! The EC2 instance is now live and connected to the internet with SSH and SFTP access available.
-Now let's add a user to the instance!
+
+###Now let's add a user to the instance!
 
 SSH into the instance and create a user
-> sudo adduser [name of user]
+'sudo adduser [user]'
+
+Create the .ssh directory for the user
+'sudo mkdir /home/[user]/.ssh
+sudo chown [user]:[user] /home/[user]/.ssh
+sudo chmod 700 /home/sftpjj/.ssh'
+
+Upload your public key to the EC2 instance
+'scp -i "~/user_key.pem" "~/key.pub" ec2-user@<public-ip>:/home/[user]/.ssh/'
+
+SSH to the ec2 instance
+'ssh -i ~/user_key.pem ec2-user@<public-ip>'
+
+Switch to the user
+'sudo su - [user]'
+
+Move the uploaded key to ./authorized_keys
+'cat /home/[user]/.ssh/file.pub >> /home/user/.ssh/authorized_keys'
+
+Remove the public key
+'rm /home/[user]/.ssh/file.pub'
+
+Set Permissions on ./authorized_keys
+'chmod 600 /home/[user]/.ssh/authorized_keys'
+
+Exit and connect to the instance with SFTP
+'sftp -i "~/user_key.pem" [user]@<public-ip>'
+
+###Now lets configure the SSH server for the user
+
+Start by using SSH to connect to the instance
+'ssh -i ~/user_key.pem ec2-user@<public-ip>'
+
+Open the SSH configuration file with nano or vim to edit
+'sudo nano /etc/ssh/ssd_config'
+
+Add the following configuration which apply the settings only to the specified user. This configuration restricts the user to the /home/[user] directory. The ForceCommand internal-sftp configuration forces the SSH session to run only the internal-sftp command which prevents the user from accessing a full SSH shell to ensure the user can only perform file transfer operations. AllowTcpForwaring no disables TCP forwarding for the user to prevent tunnels that can bypass network restrictions. X11Forwarding no removes graphical access.
+'Match User sftpjj
+  ChrootDirectory /home/sftpjj
+  ForceCommand internal-sftp
+  AllowTcpForwarding no
+  X11Forwarding no'
+
+Save and exit the nano or vim and set the correct permissions for the root directory
+'sudo chown root:root /home/[user]
+sudo chmod 755 /home/[user]'
+
+Create a home directory for the user
+'sudo mkdir /home/[user]/uploads
+sudo chown [user]:[user] /home/[user]/uploads'
+
+Restart the SSH service to apply changes
+'sudo systemctl restart sshd'
+
+Congrats! Now the SFTP-connected user is bound to a directory with set permissions and can only upload or download files.
+
+
+
+
 
 
 
