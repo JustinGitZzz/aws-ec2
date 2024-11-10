@@ -90,21 +90,21 @@ Congrats! The EC2 instance is now live and connected to the internet with SSH an
 ### Now let's add a user to the instance!
 
 SSH into the instance and create a user
-'''
-sudo adduser [user] 
-'''
+<pre style="background-color: rgb(34, 34, 34); color : whitesmoke;">
+    sudo adduser [user] 
+</pre>
 
 Create the .ssh directory for the user
-'''
+<pre style="background-color: rgb(34, 34, 34); color : whitesmoke;">
 sudo mkdir /home/[user]/.ssh
 sudo chown [user]:[user] /home/[user]/.ssh
 sudo chmod 700 /home/sftpjj/.ssh 
-'''
+</pre>
 
 Upload your public key to the EC2 instance
-'''
+<pre style="background-color: rgb(34, 34, 34); color : whitesmoke;">
 scp -i "~/user_key.pem" "~/key.pub" ec2-user@<public-ip>:/home/[user]/.ssh/
-'''
+</pre>
 
 SSH to the ec2 instance
 '''
